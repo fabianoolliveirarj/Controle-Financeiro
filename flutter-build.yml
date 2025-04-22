@@ -1,0 +1,31 @@
+name: Construir APK
+
+on:
+  push:
+    branches:
+      - principal  # ou "main", dependendo do nome do seu branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.6'  # Ajuste para a versão do seu projeto
+
+      - name: Instalar dependências
+        run: flutter pub get
+
+      - name: Construir APK
+        run: flutter build apk --release
+
+      - name: Carregar APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk-lancado
+          path: build/app/outputs/flutter-apk/app-release.apk
